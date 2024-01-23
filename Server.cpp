@@ -4,8 +4,12 @@
 
 #pragma comment(lib, "ws2_32")
 
+// 아래처럼 코드를 작성한 것은 클라이언트와 지속적으로 통신하며,
+// 클라이언트로부터 데이터를 수신하면 그 데이터를 다시 클라이언트에게 전송하는 방식입니다.
 unsigned WINAPI WorkerThread(void* Arg)
 {
+	// 함수에 전달된 인자 "Arg" 로부터 클라이언트 소켓(ClientSocket)을 가져옵니다.
+	// 함수가 스레드로 실행될 때 클라이언트 소켓을 전달하기 위해 사용됩니다.
 	SOCKET ClientSocket = *((SOCKET*)Arg);
 	while (true)
 	{
@@ -32,7 +36,7 @@ int main()
 
 	SOCKADDR_IN ListenSockAddr = { 0 , };
 	ListenSockAddr.sin_family = AF_INET;
-	ListenSockAddr.sin_addr.s_addr = INADDR_ANY;// inet_addr("127.0.0.1");
+	ListenSockAddr.sin_addr.s_addr = INADDR_ANY;
 	ListenSockAddr.sin_port = htons(22222);
 
 	bind(ListenSocket, (SOCKADDR*)&ListenSockAddr, sizeof(ListenSockAddr));
@@ -44,9 +48,15 @@ int main()
 		SOCKADDR_IN ClientSockAddr = { 0 , };
 		int ClientSockAddrSize = sizeof(ClientSockAddr);
 		SOCKET ClientSocket = accept(ListenSocket, (SOCKADDR*)&ClientSockAddr, &ClientSockAddrSize);
+
 		//thread 실행, worker thread
 		//CreateThread();
+
+		// _beginthreadex 함수를 사용하여 새로운 스레드를 생성합니다.
+		// 생성된 스레드는 WorkerThread 함수를 실행하고, 해당 스레드에게 "ClientSocket" 를 전달하기 위해 
+		// 함수 인자로 "(void*)& ClientSocket" 을 전달합니다. 반환된 스레드 핸들은 "ThreadHandle" 에 저장됩니다.
 		HANDLE ThreadHandle = (HANDLE)_beginthreadex(0, 0, WorkerThread, (void*)&ClientSocket, 0, 0);
+
 		//TerminateThread(ThreadHandle, -1); // 사용 X
 
 
