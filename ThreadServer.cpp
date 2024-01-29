@@ -8,8 +8,10 @@
 
 #pragma comment(lib, "ws2_32")
 
+// 소켓 리스트를 담기 위한 변수 선언(타입은 Vector)
 std::set<SOCKET> SessionList;
 
+// 임게영역을 미리 생성해서 이를 다양하게 활용합니다.
 CRITICAL_SECTION SessionCS;
 
 // 아래처럼 코드를 작성한 것은 클라이언트와 지속적으로 통신하며,

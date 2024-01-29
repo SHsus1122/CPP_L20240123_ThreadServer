@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <WinSock2.h>
 
 using namespace std;
@@ -64,7 +64,7 @@ int main()
 						}
 						else
 						{
-							// Polling ¹æ½Ä Àû¿ë
+							// Polling ë°©ì‹ ì ìš©
 							for (int j = 0; j < (int)ReadSocketList.fd_count; ++j)
 							{
 								int SendLength = send(ReadSocketList.fd_array[j], Buffer, RecvLength, 0);
